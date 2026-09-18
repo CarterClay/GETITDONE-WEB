@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="GetItDone — the procrastination-killing project manager. One task at a time." />
+  <meta name="theme-color" content="#faf8f5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GetItDone" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b7cf6'/%3E%3Cpolyline points='18,34 28,44 46,22' fill='none' stroke='white' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <title>GetItDone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Secular+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── MAIN ─────────────────────────────────────────── -->
+  <div class="main">
+    <header class="main-header">
+      <button class="header-logo" id="headerLogoBtn">GetItDone</button>
+      <button class="sidebar-toggle" id="sidebarToggle" title="Toggle menu" aria-label="Toggle menu">
+        <svg width="15" height="13" viewBox="0 0 15 13" fill="none">
+          <rect x=".5" y=".5" width="14" height="12" rx="2" stroke="currentColor" stroke-opacity=".6"/>
+          <line x1="10" y1=".5" x2="10" y2="12.5" stroke="currentColor" stroke-opacity=".6"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="main-content">
+
+      <!-- PROJECTS PAGE (formerly "home") -->
+      <div class="page active" id="page-home">
+        <div id="projectsListWrap"></div>
+      </div>
+      <!-- EDITOR OVERLAY (global, works on any page) -->
+      <div id="editorWrap" class="hidden editor-overlay-width">
+          <div class="editor-wrap">
+            <div class="editor-head">
+              <input type="text" class="editor-title-input" id="editorTitle" placeholder="What's your project name?" maxlength="80" aria-label="Project name" />
+              <div class="editor-actions">
+                <button class="btn btn-ghost editor-cancel-btn" id="editorCancel">Cancel</button>
+                <button class="btn btn-primary editor-save-btn" id="editorSave">Save</button>
+              </div>
+            </div>
+            <div class="editor-toolbar">
+              <div class="editor-toolbar-tools">
+                <div class="editor-color-flyout-wrap">
+                  <button class="editor-tool-btn" id="colorPickerToggle" title="Pick color">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r="1" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+                    Color
+                    <span class="editor-paint-swatch" id="paintSwatch"></span>
+                  </button>
+                </div>
+              </div>
+              <div class="color-picker color-picker-flyout" id="colorPicker">
+                <button class="color-pick-btn" data-color="#5B9CF6" title="Blue" aria-label="Blue"></button>
+                <button class="color-pick-btn" data-color="#C49EF5" title="Purple" aria-label="Purple"></button>
+                <button class="color-pick-btn" data-color="#5EC9A0" title="Teal" aria-label="Teal"></button>
+                <button class="color-pick-btn" data-color="#E5A56B" title="Amber" aria-label="Amber"></button>
+                <button class="color-pick-btn" data-color="#E27A9E" title="Pink" aria-label="Pink"></button>
+                <button class="color-pick-btn" data-color="#E0697A" title="Red" aria-label="Red"></button>
+                <button class="color-pick-btn" data-color="#F4D35E" title="Yellow" aria-label="Yellow"></button>
+                <button class="color-pick-btn" data-color="#9AA5B1" title="Gray" aria-label="Gray"></button>
+              </div>
+            </div>
+            <div class="editor-goal-tabs hidden" id="editorGoalTabs"></div>
+            <div id="editorBlocks"></div>
+            <div class="editor-add-row">
+              <div class="editor-add-group">
+                <button class="editor-add-btn" id="addGoalBtn">+ Goal</button>
+                <button class="editor-add-btn" id="addPhaseBtn">+ Phase</button>
+                <button class="editor-add-btn" id="addTaskBtn">+ Task</button>
+              </div>
+              <button class="editor-delete-project-btn hidden" id="deleteProjectBtn">Delete project</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="shortcuts-footer">
+          <div class="shortcuts-footer-grid">
+            <span><kbd>↵</kbd> smart new</span>
+            <span><kbd>⇧↵</kbd> new phase</span>
+            <span><kbd>⌘↵</kbd> new goal</span>
+            <span><kbd>⌘Z</kbd> undo</span>
+          </div>
+        </div>
+      <div class="page" id="page-finish-summary">
+        <div id="finishSummaryContent"></div>
+      </div>
+
+      <!-- INDIVIDUAL PROJECT PAGE -->
+      <div class="page" id="page-project">
+        <div id="projectPageBack"></div>
+        <div id="projectPageContent"></div>
+      </div>
+
+      <!-- GOTITDONE PAGE -->
+      <div class="page page-narrow" id="page-gotitdone">
+        <div class="vault-header">
+          <div class="vault-title">GotItDone</div>
+          <div class="vault-sub" id="vaultSub">Everything you've finished.</div>
+          <div class="vault-stats" id="vaultStats"></div>
+        </div>
+        <div class="vault-sort-row">
+          <span class="vault-sort-label">Sort by</span>
+          <div class="pill-toggle" id="doneSortToggle">
+            <button class="pill-btn active" data-sort="newest">Newest</button>
+            <button class="pill-btn" data-sort="oldest">Oldest</button>
+            <button class="pill-btn" data-sort="name">Name</button>
+          </div>
+        </div>
+        <div id="doneList"></div>
+      </div>
+
+      <!-- ACCOUNT PAGE -->
+      <div class="page page-narrow" id="page-account">
+
+        <div class="acct-hero">
+          <div class="acct-avatar" id="acctAvatarGuest">?</div>
+          <div class="acct-hero-info">
+            <input type="text" class="acct-name-input" id="localDisplayName" placeholder="Your name" maxlength="18" title="Tap to edit name" aria-label="Your name" />
+            <button class="acct-name-save" id="saveLocalNameBtn">Save</button>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><span class="stat-num" id="statActive">0</span><span class="stat-label">Projects</span></div>
+          <div class="stat-card"><span class="stat-num" id="statLeft">0</span><span class="stat-label">Tasks left</span></div>
+        </div>
+
+        <div class="settings-group settings-group-spaced">
+          <div class="settings-group-label">Data</div>
+          <div class="settings-card">
+            <div class="settings-row">
+              <div class="settings-info"><div class="settings-title">Clear all data</div><div class="settings-sub">Permanently delete everything</div></div>
+              <button class="btn btn-danger-soft" id="clearDataBtn">Clear</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SIDEBAR ──────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-header">
+        <button class="sidebar-profile-btn" id="headerProfileBtn">
+          <span class="header-profile-avatar" id="headerProfileAvatar">?</span>
+          <span class="header-profile-name" id="headerProfileName">Account</span>
+        </button>
+        <button class="sidebar-close" id="sidebarCloseBtn" title="Close menu" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item" id="newProjectNavBtn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 16 16"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>
+          <span>New project</span>
+        </button>
+        <button class="nav-item active" data-page="home">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 16 16"><path d="M2 6l6-4 6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z"/></svg>
+          <span>Projects</span>
+        </button>
+        <button class="nav-item" data-page="gotitdone">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4"/></svg>
+          <span>GotItDone</span>
+        </button>
+        <div id="sidebarProjectsNav" class="sidebar-projects-nav"></div>
+      </nav>
+    </div>
+  </aside>
+</div>
+
+<!-- ── CONFIRM MODAL (reused for delete project, clear data, etc.) ── -->
+<div class="modal-overlay hidden" id="deleteModal">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle" aria-describedby="deleteModalSub">
+    <div class="modal-title" id="deleteModalTitle">Delete project?</div>
+    <div class="modal-sub" id="deleteModalSub">This can't be undone.</div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" id="deleteModalCancel">Cancel</button>
+      <button class="btn btn-danger" id="deleteModalConfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
