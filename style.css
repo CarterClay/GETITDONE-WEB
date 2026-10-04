@@ -91,6 +91,9 @@
  .sidebar-inner { width: 224px; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
  .sidebar-header { height: var(--header-h); display: flex; align-items: stretch; border-bottom: 1px solid var(--border); flex-shrink: 0; }
  .sidebar-nav { padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; flex: 1; overflow-y: auto; }
+ /* who made it: one quiet line at the foot of the sidebar, under the nav */
+ .sidebar-credit { flex-shrink: 0; padding: 12px 18px; border-top: 1px solid var(--border); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--text3); text-decoration: none; transition: color .2s; }
+ .sidebar-credit:hover { color: var(--text); }
  .nav-item {
  display: flex; align-items: center; gap: 10px;
  padding: 10px 13px; border-radius: var(--r);
